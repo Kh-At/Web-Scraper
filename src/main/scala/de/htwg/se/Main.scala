@@ -1,7 +1,6 @@
 package de.htwg.se
 object Main
 
-@main
 def main(args:Array[String]): Unit = {
     val x:Int = args(0).toInt
     val y:Int = args(1).toInt
