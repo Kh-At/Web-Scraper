@@ -32,7 +32,7 @@ class MyTest extends AnyWordSpec {
       "|   |" + "\n" +
       "|   |" + "\n" +
       "|   |" + "\n" +
-      "+---+" + "\n" )
+      "+---+" + "\n")
     }
   }
 }
