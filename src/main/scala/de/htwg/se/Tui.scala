@@ -11,6 +11,6 @@ class Tui (x:Int, y:Int) {
   
   def build_all(): String = build_bar(x) + build_tower(x, y) + build_bar(x)
   
-  def print_Tui(): Unit = println(build_all())
+  def print_Tui(): Unit = println(build_all())  
 
 }
