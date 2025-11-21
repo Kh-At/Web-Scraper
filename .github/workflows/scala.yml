@@ -2,9 +2,9 @@ name: Scala CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -15,15 +15,21 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # --- Set up JDK ---
+      # --- Set up Java ---
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      # --- CACHE ---
-      # Cache Ivy, Coursier und sbt build artifacts
+      # --- Install sbt via Coursier ---
+      - name: Install sbt
+        run: |
+          curl -fLo cs https://git.io/coursier-cli-linux
+          chmod +x cs
+          ./cs setup
+
+      # --- CACHE (Ivy, sbt, Coursier, target) ---
       - name: Cache sbt and coursier
         uses: actions/cache@v4
         with:
