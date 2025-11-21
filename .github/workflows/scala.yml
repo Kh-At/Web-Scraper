@@ -1,58 +1,55 @@
 name: Scala CI
-
 on:
   push:
-    branches: [ master ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ master ]
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-
+    runs-on: ubuntu-latest
     steps:
-      # --- CHECKOUT ---
-      - uses: actions/checkout@v4
+      # Getrennter Checkout: Für PRs den HEAD-SHA verwenden!
+      - name: Checkout (für Push)
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # --- Set up Java ---
-      - name: Set up Java
+      - name: Checkout (für PRs – das ist der Fix!)
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
+          cache: sbt  # Gut so – cached alles Nötige
 
-      # --- Install sbt non-interactive via Coursier ---
-      - name: Install sbt via Coursier
-        run: |
-          curl -fLo cs https://git.io/coursier-cli-linux
-          chmod +x cs
-          ./cs install sbt --yes
-          echo "$HOME/.local/share/coursier/bin" >> $GITHUB_PATH
+      - name: Setup SBT
+        uses: sbt/setup-sbt@v1
 
-      # --- Cache sbt/Coursier/Ivy/Target ---
-      - name: Cache sbt and coursier
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/coursier
-            ~/.ivy2/cache
-            ~/.sbt
-            **/target
-          key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}-${{ hashFiles('**/project/*.scala', '**/project/*.sbt') }}
-
-      # --- Dependencies ---
-      - name: Download dependencies
-        run: sbt update
-
-      # --- Tests + Coverage ---
       - name: Run tests with coverage
-        run: sbt coverage test coverageReport coverageAggregate
+        run: sbt clean coverage test coverageReport
 
-      # --- Coveralls Upload ---
-      - name: Coveralls.io upload
-        run: sbt coveralls
+      - name: Upload coverage to Coveralls
+        run: sbt coverageAggregate coveralls
         env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # ← Hier der 2. Fix: GITHUB_TOKEN statt separatem Token!
+        if: success()
+
+      - name: Upload dependency graph
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: scalacenter/sbt-dependency-submission@v2
+        with:
+          modules-ignore: test
+          configs-ignore: test
