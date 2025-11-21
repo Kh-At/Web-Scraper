@@ -3,7 +3,6 @@ ThisBuild / scalaVersion := "3.3.7"
 name := "WebCrawler-Kh"
 
 coverageFailOnMinimum := false
-coverageMinimum := 80
 
 
 lazy val root = (project in file("."))
