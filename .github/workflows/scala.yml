@@ -8,12 +8,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       # --- CHECKOUT ---
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       # --- Set up Java ---
       - name: Set up Java
@@ -22,14 +24,15 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      # --- Install sbt via Coursier ---
-      - name: Install sbt
+      # --- Install sbt non-interactive via Coursier ---
+      - name: Install sbt via Coursier
         run: |
           curl -fLo cs https://git.io/coursier-cli-linux
           chmod +x cs
-          ./cs setup
+          ./cs install sbt --yes
+          echo "$HOME/.local/share/coursier/bin" >> $GITHUB_PATH
 
-      # --- CACHE (Ivy, sbt, Coursier, target) ---
+      # --- Cache sbt/Coursier/Ivy/Target ---
       - name: Cache sbt and coursier
         uses: actions/cache@v4
         with:
@@ -40,15 +43,15 @@ jobs:
             **/target
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}-${{ hashFiles('**/project/*.scala', '**/project/*.sbt') }}
 
-      # --- DEPENDENCIES ---
+      # --- Dependencies ---
       - name: Download dependencies
         run: sbt update
 
-      # --- TEST + COVERAGE ---
+      # --- Tests + Coverage ---
       - name: Run tests with coverage
         run: sbt coverage test coverageReport coverageAggregate
 
-      # --- UPLOAD COVERAGE TO COVERALLS ---
+      # --- Coveralls Upload ---
       - name: Coveralls.io upload
         run: sbt coveralls
         env:
