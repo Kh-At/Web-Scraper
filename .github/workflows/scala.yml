@@ -1,0 +1,49 @@
+name: Scala CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- CHECKOUT ---
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # --- Set up JDK ---
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # --- CACHE ---
+      # Cache Ivy, Coursier und sbt build artifacts
+      - name: Cache sbt and coursier
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/coursier
+            ~/.ivy2/cache
+            ~/.sbt
+            **/target
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}-${{ hashFiles('**/project/*.scala', '**/project/*.sbt') }}
+
+      # --- DEPENDENCIES ---
+      - name: Download dependencies
+        run: sbt update
+
+      # --- TEST + COVERAGE ---
+      - name: Run tests with coverage
+        run: sbt coverage test coverageReport coverageAggregate
+
+      # --- UPLOAD COVERAGE TO COVERALLS ---
+      - name: Coveralls.io upload
+        run: sbt coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
