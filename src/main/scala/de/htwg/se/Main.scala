@@ -2,12 +2,17 @@ package de.htwg.se
 object Main
 
 def main(args:Array[String]): Unit = {
-    val x:Int = args(0).toInt
-    val y:Int = args(1).toInt
-    if (x < 1|| y < 1) {
-      println("Error")
+  if(checkArgs(args(0).toInt, args(1).toInt)) {
+    val myTui: Tui = new Tui(args(0).toInt, args(1).toInt)
+    myTui.print_Tui()
+  } else
+    println("Error")
+}
+
+def checkArgs( width: Int, length: Int ): Boolean = {
+    if (width < 1 || length < 1) {
+      false
     } else {
-      val myTui: Tui = new Tui(x, y)
-      myTui.print_Tui()
+      true
     }
 }
