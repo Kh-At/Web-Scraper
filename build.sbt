@@ -4,6 +4,7 @@ name := "WebCrawler-Kh"
 
 coverageFailOnMinimum := false
 
+
 lazy val root = (project in file("."))
   .settings(
     libraryDependencies ++= Seq(   
