@@ -5,7 +5,19 @@ class WebScraperModel {
   private var content: List[String] = List()
   private var status: String = "ready"
   private var sourceType: String = "none"
+  
   private val observers: ListBuffer[ModelObserver] = ListBuffer()
+  private val welcomeMessage = s"Web Scraper TUI" + "\n" + "Tippe 'help' für verfügbare Befehle"
+  private val helpMessage:String = 
+      "|Verfügbare Befehle:" + "\n"
+    + "|  load <dateiname>    - Lädt Inhalt aus Datei " + "\n"
+    + "|  scrape <url>        - Scraped Inhalt von Website" + "\n"
+    + "|  input oder i        - Startet Input-Modus für mehrzeiligen Text" + "\n"
+    + "|  input <text>        - Verarbeitet direkte Texteingabe (einzeilig)" + "\n"
+    + "|  save <dateiname>    - Speichert aktuellen Content" + "\n"
+    + "|  clear               - Leert den Content" + "\n"
+    + "|  help                - Zeigt diese Hilfe" + "\n"
+    + "|  exit/quit           - Beendet das Programm" + "\n" 
 
   def processContent(source: ContentTyp): Unit = {
     this.status = "loading"
@@ -30,6 +42,8 @@ class WebScraperModel {
   def getContent: List[String] = content
   def getStatus: String = status
   def getSourceType: String = sourceType
+  def getWelcomeMessage: String = welcomeMessage
+  def getHelpMessage: String = helpMessage
 
   // Observer Pattern Methoden
   def addObserver(observer: ModelObserver): Unit = observers += observer

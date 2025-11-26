@@ -13,15 +13,13 @@ object Main {
     val controller = new Controller(model, view)
       
     model.addObserver(view)
-    view.display()
-    view.showWelcome()
     controller.start()
   }
 
   def checkArgs(argumentsToCheck: Array[String]): Boolean = {
     if (argumentsToCheck.length < 2) {
       println("Usage: java -jar program.jar <width> <height>" + "\n" + "Error: Missing arguments")
-      false
+      return false
     }
 
     if (argumentsToCheck(0).toInt < 1 || argumentsToCheck(1).toInt < 1) {

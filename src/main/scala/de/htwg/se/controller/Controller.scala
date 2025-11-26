@@ -7,16 +7,6 @@ import scala.util.{Using, Try}
 class Controller(model: WebScraperModel, view: Tui) {
   
   val prompt = ">"
-  val helpMessage:String = 
-      "|Verfügbare Befehle:" + "\n"
-    + "|  load <dateiname>    - Lädt Inhalt aus Datei " + "\n"
-    + "|  scrape <url>        - Scraped Inhalt von Website" + "\n"
-    + "|  input oder i        - Startet Input-Modus für mehrzeiligen Text" + "\n"
-    + "|  input <text>        - Verarbeitet direkte Texteingabe (einzeilig)" + "\n"
-    + "|  save <dateiname>    - Speichert aktuellen Content" + "\n"
-    + "|  clear               - Leert den Content" + "\n"
-    + "|  help                - Zeigt diese Hilfe" + "\n"
-    + "|  exit/quit           - Beendet das Programm" + "\n"
   
   def start(): Unit = {
     mainLoop()
@@ -24,6 +14,7 @@ class Controller(model: WebScraperModel, view: Tui) {
   
   private def mainLoop(): Unit = {
     var running = true
+    model.processContent(MessageTyp(model.getWelcomeMessage))
     while (running) {
       
       print(prompt)
@@ -39,7 +30,7 @@ class Controller(model: WebScraperModel, view: Tui) {
     val parts = input.split("\\s+").toList
 
     parts match {
-      case "help" :: Nil => model.processContent(new InternelMessageTyp(helpMessage))
+      case "help" :: Nil => model.processContent(new MessageTyp(model.getHelpMessage))
         true
       
       case "load" :: filename :: Nil => val source = new FileContentTyp(filename)
@@ -61,7 +52,7 @@ class Controller(model: WebScraperModel, view: Tui) {
       case "exit" :: Nil => println("byby boi!")
         false
 
-      case _ => model.processContent(new InternelMessageTyp(helpMessage))
+      case _ => model.processContent(new MessageTyp(model.getHelpMessage))
         println(s"Unbekannter Befehl: '$input'")
         true
     }
