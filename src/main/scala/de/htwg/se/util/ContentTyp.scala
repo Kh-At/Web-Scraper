@@ -1,25 +1,30 @@
 package de.htwg.se
 import scala.io.Source
 
-trait ContentSource {
+trait ContentTyp {
   def getContent(): List[String]
   def getSourceType(): String
 }
 
-class FileContentSource(filename: String) extends ContentSource {
+class FileContentTyp(filename: String) extends ContentTyp {
   def getContent(): List[String] = Source.fromFile(filename).getLines().toList
   def getSourceType(): String = "file"
 }
 
-class UserInputSource(input: String) extends ContentSource {
+class UserInputTyp(input: String) extends ContentTyp {
   def getContent(): List[String] = List(input)
-  def getSourceType(): String = "user_input"
+  def getSourceType(): String = "user input"
 }
 
-class WebsiteContentSource(url: String) extends ContentSource {
+class WebsiteContentTyp(url: String) extends ContentTyp {
   def getContent(): List[String] = {
     // Platzhalter für Web-Scraping Logik
     List(s"Website: $url", "Content would be scraped here...")
   }
   def getSourceType(): String = "website"
+}
+
+class InternelMessageTyp(message:String) extends ContentTyp {
+  def getContent(): List[String] = List(message)
+  def getSourceType() :String = "Internel Message"  
 }

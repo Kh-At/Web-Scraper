@@ -2,5 +2,5 @@
 package de.htwg.se
 
 trait ModelObserver {
-  def onModelChanged(content: List[String], status: String, sourceType: String): Unit
+  def update(content: List[String], status: String, sourceType: String): Unit
 }

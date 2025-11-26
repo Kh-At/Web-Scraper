@@ -10,30 +10,39 @@ class Tui(val width: Int, val height: Int) extends ModelObserver {
   private var currentStatus: String = "ready"
   private var currentSourceType: String = "none"
 
-  def build_bar(width: Int): String = plus + minus * width + plus + "\n"
-  
   def build_tower(width: Int, height: Int, content: List[String]): String = {
     val contentWidth = math.max(1, width)
     val contentHeight = math.max(1, height - 2)
-    
-    val wrappedLines = content.flatMap { line =>
-      wrapText(line, contentWidth)
-    }
-    
+    val wrappedLines = content.flatMap {line => wrapText(line, contentWidth)}
     val linesToShow = wrappedLines.take(contentHeight)
-    
-    val contentLines = linesToShow.map { line =>
-      val formattedLine = formatLine(line, contentWidth)
-      pipe + formattedLine + pipe
-    }
-    
-    val emptyLines = List.fill(contentHeight - linesToShow.size)(
-      pipe + space * contentWidth + pipe
-    )
-    
+    val contentLines = linesToShow.map {line => val formattedLine = formatLine(line, contentWidth); pipe + formattedLine + pipe}
+    val emptyLines = List.fill(contentHeight - linesToShow.size) (pipe + space * contentWidth + pipe )
     (contentLines ++ emptyLines).mkString("\n") + "\n"
   }
+
+  def build_bar(width: Int): String = plus + minus * width + plus + "\n"
   
+  def build_all(): String = {
+    val displayContent = currentStatus match {
+      case "loading" => List("Loading...")
+      case "error" => currentContent
+      case "success" => currentContent
+      case _ => List(s"Status: $currentStatus", s"Source: $currentSourceType")
+    }
+    build_bar(width) + build_tower(width, height, displayContent) + build_bar(width)
+  }
+  
+  def display(): Unit = {
+    print("\n" * 5)
+    println(build_all())
+    println("Commands: load <file>, scrape <url>, input <text>, save <file>, help, exit")
+  }
+  
+  def showWelcome(): Unit = {
+    println(s"Web Scraper TUI - Window size: ${width}x${height}")
+    println("Tippe 'help' für verfügbare Befehle")
+  }
+
   private def wrapText(text: String, maxWidth: Int): List[String] = {
     if (text.isEmpty) return List("")
     
@@ -62,12 +71,10 @@ class Tui(val width: Int, val height: Int) extends ModelObserver {
           }
         }
       }
-    }
-    
+    } 
     if (currentLine.nonEmpty) result += currentLine
     result.toList
   }
-  
   private def splitLongWord(word: String, maxWidth: Int): List[String] = {
     word.grouped(maxWidth).toList
   }
@@ -79,31 +86,10 @@ class Tui(val width: Int, val height: Int) extends ModelObserver {
       line.take(contentWidth)
     }
   }
-  
-  def build_all(): String = {
-    val displayContent = currentStatus match {
-      case "loading" => List("Loading...")
-      case "error" => currentContent
-      case "success" => currentContent
-      case _ => List(s"Status: $currentStatus", s"Source: $currentSourceType")
-    }
-    
-    build_bar(width) + build_tower(width, height, displayContent) + build_bar(width)
-  }
-  
-  def display(): Unit = {
-    print("\n" * 5)
-    println(build_all())
-    println("Commands: load <file>, scrape <url>, input <text>, save <file>, help, exit")
-  }
-  
-  def onModelChanged(content: List[String], status: String, sourceType: String): Unit = {
+    def update(content: List[String], status: String, sourceType: String): Unit = {
     this.currentContent = content
     this.currentStatus = status
     this.currentSourceType = sourceType
-  }
-  
-  def showWelcome(): Unit = {
-    println(s"Web Scraper TUI - Window size: ${width}x${height}")
+    display()
   }
 }

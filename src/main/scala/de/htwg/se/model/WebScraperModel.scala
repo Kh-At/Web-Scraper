@@ -1,5 +1,4 @@
 package de.htwg.se
-
 import scala.collection.mutable.ListBuffer
 
 class WebScraperModel {
@@ -8,12 +7,12 @@ class WebScraperModel {
   private var sourceType: String = "none"
   private val observers: ListBuffer[ModelObserver] = ListBuffer()
 
-  def processContent(source: ContentSource): Unit = {
+  def processContent(source: ContentTyp): Unit = {
     this.status = "loading"
     this.sourceType = source.getSourceType()
     
     source match {
-        case _: WebsiteContentSource => notifyObservers()
+        case _: WebsiteContentTyp => notifyObservers()
         case _ =>
     }
     
@@ -36,6 +35,6 @@ class WebScraperModel {
   def addObserver(observer: ModelObserver): Unit = observers += observer
   def removeObserver(observer: ModelObserver): Unit = observers -= observer
   private def notifyObservers(): Unit = {
-    observers.foreach(_.onModelChanged(content, status, sourceType))
+    observers.foreach(_.update(content, status, sourceType))
   }
 }
