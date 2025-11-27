@@ -9,7 +9,7 @@ object Main {
     val width: Int= args(0).toInt
     val height: Int= args(1).toInt
     val model = new WebScraperModel()
-    val view = new Tui(width, height) // Der Erste Parameter ist die Breite und der Zweite ist die Höhe.
+    val view = new Tui(width, height)
     val controller = new Controller(model, view)
       
     model.addObserver(view)
@@ -21,12 +21,11 @@ object Main {
       println("Usage: java -jar program.jar <width> <height>" + "\n" + "Error: Missing arguments")
       return false
     }
-
-    if (argumentsToCheck(0).toInt < 1 || argumentsToCheck(1).toInt < 1) {
-      println("Error: Invalid dimensions. Width and height must be at least 1.")
-      false
-    } else {
-      true
+    
+    try {
+      argumentsToCheck(0).toInt >= 1 && argumentsToCheck(1).toInt >= 1
+    } catch {
+      case _: NumberFormatException => false
     }
   }
 }

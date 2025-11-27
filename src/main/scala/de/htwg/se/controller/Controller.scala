@@ -49,7 +49,7 @@ class Controller(model: WebScraperModel, view: Tui) {
       case "clear" :: Nil => model.processContent(new UserInputTyp(""))
         true
 
-      case "exit" :: Nil => println("byby boi!")
+      case "exit" :: Nil => model.processContent(new MessageTyp("auf wiedersehen!"))
         false
 
       case _ => model.processContent(new MessageTyp(model.getHelpMessage))
@@ -58,13 +58,11 @@ class Controller(model: WebScraperModel, view: Tui) {
     }
   }
 
-  private def saveCurrentContent(filename: String): Unit = {
+  private def saveCurrentContent(filename: String): Try[Unit] = {
     val content = model.getContent.mkString("\n")
     Try {
-      Using(Files.newBufferedWriter(Paths.get(filename), 
-             StandardOpenOption.CREATE, 
-             StandardOpenOption.TRUNCATE_EXISTING)) { writer =>
-        writer.write(content + "\n")
+      Using(Files.newBufferedWriter(Paths.get(filename), StandardOpenOption.CREATE, 
+        StandardOpenOption.TRUNCATE_EXISTING)) { writer => writer.write(content + "\n")
       }
       println(s"Content gespeichert in: $filename")
     }.recover {
