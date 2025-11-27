@@ -91,6 +91,12 @@ class WebScraperModelTest extends AnyWordSpec {
       model.removeObserver(testObserver)
     }
     
+    "MessageTyp handle farewell message" in {
+      val source = new MessageTyp("auf wiedersehen!")
+      source.getContent() should be(List("auf wiedersehen!"))
+      source.getSourceType() should be("Message")
+    }
+
     "handle errors gracefully when file not found" in {
       model.addObserver(testObserver)
       testObserver.reset()

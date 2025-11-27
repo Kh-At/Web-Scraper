@@ -26,5 +26,5 @@ class WebsiteContentTyp(url: String) extends ContentTyp {
 
 class MessageTyp(message:String) extends ContentTyp {
   def getContent(): List[String] = List(message)
-  def getSourceType() :String = "Internel Message"  
+  def getSourceType() :String = "Message"  
 }

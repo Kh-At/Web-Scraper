@@ -12,7 +12,7 @@ class Controller(model: WebScraperModel, view: Tui) {
     mainLoop()
   }
   
-  private def mainLoop(): Unit = {
+  def mainLoop(): Unit = {
     var running = true
     model.processContent(MessageTyp(model.getWelcomeMessage))
     while (running) {
