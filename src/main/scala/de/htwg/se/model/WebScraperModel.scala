@@ -1,6 +1,7 @@
 package de.htwg.se
 import scala.collection.mutable.ListBuffer
 
+
 class WebScraperModel {
   private var content: List[String] = List()
   private var status: String = "ready"

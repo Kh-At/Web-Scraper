@@ -14,7 +14,6 @@ class TuiTest extends AnyWordSpec {
       tui.build_bar(8) should be("+--------+" + "\n")
     }
     
-    
     "wrap long text to multiple lines" in {
       val longText = "This is a very long text that should wrap to multiple lines"
       val result = tui.build_tower(15, 10, List(longText))
@@ -37,13 +36,13 @@ class TuiTest extends AnyWordSpec {
       val exactWidthText = "1234567890"
       val result = tui.build_tower(10, 3, List(exactWidthText))
       result should include ("1234567890")
-      result should not include (" ") // no trailing spaces for exact match
+      result should not include (" ")
     }
     
     "format lines with trailing spaces when shorter than width" in {
       val shortText = "short"
       val result = tui.build_tower(10, 3, List(shortText))
-      result should include ("short     ") // text + 5 spaces
+      result should include ("short     ")
     }
     
     "handle empty string in wrapText" in {
@@ -65,15 +64,6 @@ class TuiTest extends AnyWordSpec {
       val result = tui.splitLongWord("abcdefghij", 3)
       result should be(List("abc", "def", "ghi", "j"))
     }
-    /*
-    "update model state correctly via update" in {
-      val tui = new Tui(10, 5)
-      tui.update(List("new content"), "success", "user_input")
-      
-      // Verify internal state was updated
-      val display = tui.build_all()
-      display should include ("new content")
-    }*/
     
     "show loading status correctly in build_all" in {
       val tui = new Tui(10, 5)
@@ -82,24 +72,7 @@ class TuiTest extends AnyWordSpec {
       
       result should include ("Loading...")
     }
-    /*
-    "show error status with content in build_all" in {
-      val tui = new Tui(10, 5)
-      tui.update(List("File not found"), "error", "file")
-      val result = tui.build_all()
-      
-      result should include ("File not found")
-    }
-    
-    "show ready status with source info in build_all" in {
-      val tui = new Tui(10, 5)
-      tui.update(List(), "ready", "none")
-      val result = tui.build_all()
-      
-      result should include ("Status: ready")
-      result should include ("Source: none")
-    }
-    */
+
     "display method should not throw exceptions" in {
       val tui = new Tui(10, 5)
       noException should be thrownBy tui.display()
@@ -107,18 +80,12 @@ class TuiTest extends AnyWordSpec {
   
     "be created with correct dimensions" in {
       val tui = new Tui(20, 10)
-      // Test that Tui can be instantiated without errors
       tui should not be null
     }
     
     "update internal state via update" in {
       val tui = new Tui(15, 8)
-      
-      // Test that Tui implements ModelObserver interface
       tui.update(List("test content"), "success", "user_input")
-      
-      // We can't test private methods directly, but we can verify the state was updated
-      // by testing public behavior if available, or rely on integration tests
     }
     
     "handle different status types in update" in {
@@ -128,8 +95,6 @@ class TuiTest extends AnyWordSpec {
       tui.update(List("error message"), "error", "file")
       tui.update(List("success content"), "success", "user_input")
       tui.update(List(), "ready", "none")
-      
-      // All calls should complete without errors
     }
 
     "work with model updates" in {
@@ -138,9 +103,6 @@ class TuiTest extends AnyWordSpec {
       
       model.addObserver(tui)
       model.processContent(new UserInputTyp("integration test"))
-      
-      // Verify the observer pattern works
-      // We can't test private display methods, but the integration should work
     }
 }
 }

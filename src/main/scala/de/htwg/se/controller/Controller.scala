@@ -4,31 +4,36 @@ import scala.io.StdIn.readLine
 import java.nio.file.{Files, Paths, StandardOpenOption}
 import scala.util.{Using, Try}
 
+//State Pattern
+case class State(booleanValue: Boolean) {
+  def setTrue: State = this.copy(booleanValue = true)
+  def setFalse: State = this.copy(booleanValue = false)
+  def getValue: Boolean = booleanValue
+}
+
 class Controller(model: WebScraperModel, view: Tui) {
   
   val prompt = ">"
-  
-  def start(): Unit = {
-    mainLoop()
+  def start(): State = {
+    model.processContent(new MessageTyp(model.getWelcomeMessage))
+    mainLoop(new State(true))
   }
-  
-  def mainLoop(): Unit = {
-    var running = true
-    model.processContent(MessageTyp(model.getWelcomeMessage))
-    while (running) {
-      
+
+  def mainLoop(state: State): State = {
+    if(state.getValue) {
       print(prompt)
       val input = readLine().trim
       handleUserInput(input) match {
-        case false => running = false
-        case true =>
+        case true  => mainLoop(state)
+        case false => 
       }
     }
+    new State(true) // Gibt State True zurück um auszusagen das die Methode schon Fertig gelaufen ist.
   }
 
   def handleUserInput(input: String): Boolean = {
     val parts = input.split("\\s+").toList
-
+      
     parts match {
       case "help" :: Nil => model.processContent(new MessageTyp(model.getHelpMessage))
         true
@@ -42,13 +47,13 @@ class Controller(model: WebScraperModel, view: Tui) {
       
       case "input" :: text => model.processContent(new UserInputTyp(text.mkString(" ")))
         true
-
+      
       case "save" :: filename :: Nil => saveCurrentContent(filename)
         true
-        
+      
       case "clear" :: Nil => model.processContent(new UserInputTyp(""))
         true
-
+      
       case "exit" :: Nil => model.processContent(new MessageTyp("auf wiedersehen!"))
         false
 
