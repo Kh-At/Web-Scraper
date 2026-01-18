@@ -1,7 +1,6 @@
 package de.htwg.se.util.controllerUtils.memento
 
 import de.htwg.se.util.controllerUtils.commands._
-import com.google.inject.Inject
 
 case class Memento(content: List[String], command: Command) {
   def getState: Memento = this

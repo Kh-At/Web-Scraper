@@ -1,4 +1,5 @@
 package de.htwg.se.util.viewUtils
+
 import de.htwg.se.util.modelUtils.ContentStatus
 
 trait Observer {

@@ -1,6 +1,10 @@
 package de.htwg.se.util.controllerUtils.commands
 
+
+
+import de.htwg.se.util.FileIO
 import de.htwg.se.controller.Controller
+import de.htwg.se.config.Implicits.given
 import de.htwg.se.util.viewUtils.Messages
 import de.htwg.se.util.modelUtils.contentTyp._
 import de.htwg.se.util.controllerUtils.memento._
@@ -26,7 +30,7 @@ class HelpCommand(webController: Controller, messages: Messages) extends Command
 
 class LoadCommand(webController: Controller, filename: String) extends Command {
   def execute(): Boolean = {
-    webController.passContent(new FileContentTyp(filename))
+    webController.passContent(new FileContentTyp(filename)(using summon[FileIO]))
     true
   }
 }

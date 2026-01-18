@@ -1,7 +1,7 @@
 package de.htwg.se.controller
 
-import scala.xml._
 import de.htwg.se.model._
+import de.htwg.se.util.FileIO
 import de.htwg.se.util.viewUtils.Messages
 import de.htwg.se.util.modelUtils.contentTyp._
 import de.htwg.se.util.controllerUtils.memento._
@@ -10,7 +10,7 @@ import de.htwg.se.util.controllerUtils.commands._
 import scala.util.{Using, Try}
 import java.nio.file.{Files, Paths, StandardOpenOption}
 
-class Controller(using model0: ScraperModelInterface, messages: Messages, contentHistory: MementoHistory)
+class Controller(using model0: ScraperModelInterface, messages: Messages, contentHistory: MementoHistory, format: FileIO)
   extends ControllerInterface {
   
   var commando: Command = _
@@ -49,24 +49,8 @@ class Controller(using model0: ScraperModelInterface, messages: Messages, conten
 
   def saveCurrentContent(filename: String, sitename: String): Try[Unit] = {
     val content = model.currentContent.mkString("\n")
-
-    val xml =
-    <Website> 
-      <Name> {sitename} </Name>
-      <Content> {content} </Content>
-    </Website>
-    
-    Try {
-      if (filename.endsWith(".xml")) XML.save(filename, xml, "UTF-8", xmlDecl = true)
-      else if (filename.endsWith(".json")) { }
-      else {
-        Using(Files.newBufferedWriter(Paths.get(filename), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)){
-          writer => writer.write(content + "\n")}
-        println(s"Content gespeichert in: $filename")
-      }
-    }.recover {
-      case e: Exception =>
-        println(s"Fehler beim Speichern: ${e.getMessage}")
+    Try{
+      format.save(filename, sitename, content)
     }
   }
 }

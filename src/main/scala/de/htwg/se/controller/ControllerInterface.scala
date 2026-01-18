@@ -1,8 +1,7 @@
 package de.htwg.se.controller
 
 import scala.util.{Using, Try}
-import de.htwg.se.model.WebScraperModel
-import de.htwg.se.model.ScraperModelInterface
+import de.htwg.se.model.{WebScraperModel, ScraperModelInterface}
 import de.htwg.se.util.modelUtils.contentTyp._
 
 trait ControllerInterface:

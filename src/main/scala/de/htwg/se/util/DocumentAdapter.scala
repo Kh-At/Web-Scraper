@@ -1,4 +1,5 @@
 package de.htwg.se.util
+
 import org.jsoup.nodes.Document
 
 case class DocumentAdapter(private val doc: Document) {    

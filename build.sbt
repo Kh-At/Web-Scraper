@@ -19,6 +19,7 @@ lazy val root = (project in file(".")).settings(
       "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
       "net.codingwell" %% "scala-guice" % "7.0.0",
       "com.google.inject" % "guice" % "5.1.0",
+      "com.typesafe.play" %% "play-json" % "2.10.0",
     ), 
     coverageEnabled := true,
     libraryDependencies ++= {
