@@ -10,7 +10,7 @@ class FileContentTyp(filename: String)(using file: FileIO) extends ContentTyp {
     val result: Try[List[String]] = Try{file.load(filename)}
     result match {
       case Success(lines) => lines
-      case Failure(ex) => "fuck you!" :: Nil
+      case Failure(ex) => "File not found!" :: Nil
     }
   }
 }
