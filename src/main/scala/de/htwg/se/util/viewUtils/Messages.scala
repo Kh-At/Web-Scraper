@@ -7,14 +7,14 @@ class Messages {
     private val byby: String = "auf wiedersehen!"
     private val helpMessage: String = 
         "|Verfügbare Befehle:" + "\n"
-        + "|  load <dateiname>    - Lädt Inhalt aus Datei " + "\n"
-        + "|  scrape <url>        - Scraped Inhalt von Website" + "\n"
-        + "|  input oder i        - Startet Input-Modus für mehrzeiligen Text" + "\n"
-        + "|  input <text>        - Verarbeitet direkte Texteingabe (einzeilig)" + "\n"
-        + "|  save <dateiname>    - Speichert aktuellen Content" + "\n"
-        + "|  clear               - Leert den Content" + "\n"
-        + "|  help                - Zeigt diese Hilfe" + "\n"
-        + "|  exit/quit           - Beendet das Programm" + "\n"
+        + "|  load <dateiname>                 - Lädt Inhalt aus Datei " + "\n"
+        + "|  scrape <url>                     - Scraped Inhalt von Website" + "\n"
+        + "|  input oder i                     - Startet Input-Modus für mehrzeiligen Text" + "\n"
+        + "|  input <text>                     - Verarbeitet direkte Texteingabe (einzeilig)" + "\n"
+        + "|  save <dateiname> <Websitename>   - Speichert aktuellen Content" + "\n"
+        + "|  clear                            - Leert den Content" + "\n"
+        + "|  help                             - Zeigt diese Hilfe" + "\n"
+        + "|  exit/quit                        - Beendet das Programm" + "\n"
 
     def getWelcomeMessage(): String = welcomeMessage
     def getHelpmessage(): String = helpMessage
