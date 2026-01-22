@@ -2,6 +2,7 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.3.7"
 name := "WebCrawler-Kh"
 coverageFailOnMinimum := false
+coverageExcludedPackages:= de/htwg/se/view
 
 fork := true
 run / connectInput := true
