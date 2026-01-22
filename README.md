@@ -24,6 +24,7 @@ Dieses Projekt ist ein Web Scraper, der Daten von Webseiten extrahiert und in ei
 - **SBT** (Scala Build Tool), um das Projekt zu bauen und auszuführen.
 
 **Usage:**
+
 *Start: (TUI)*
    ```scala
    sbt "run width length"
