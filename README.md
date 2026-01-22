@@ -23,12 +23,12 @@ Dieses Projekt ist ein Web Scraper, der Daten von Webseiten extrahiert und in ei
 - **Java 8+** muss auf deinem Rechner installiert sein (Scala benötigt Java).
 - **SBT** (Scala Build Tool), um das Projekt zu bauen und auszuführen.
 
-
-**Usage: (TUI)**
+**Usage:**
+*Start: (TUI)*
    ```scala
    sbt "run width length"
    ```
-**Usage: (GUI)**
+*Start: (GUI)*
    ```scala
    sbt "run width length g"
    ```
