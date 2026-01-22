@@ -8,7 +8,7 @@ Dieses Projekt ist ein Web Scraper, der Daten von Webseiten extrahiert und in ei
 ## Features
 - **Automatisiertes Web Scraping:** Extrahiert Daten von beliebigen Webseiten.
 - **Datenfilterung:** Möglichkeit, nur bestimmte Daten (z.B. Preise, Artikelüberschriften) zu extrahieren.
-- **Speicherung der Daten:** Gesammelte Daten werden in **CSV** oder **JSON** gespeichert.
+- **Speicherung der Daten:** Gesammelte Daten werden in **XML** oder **JSON** gespeichert.
 - **Zwei Startoptionen:** Kommandozeilen-Interface und grafische Benutzeroberfläche (GUI).
 
 ## Technologien
