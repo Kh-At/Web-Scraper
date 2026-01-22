@@ -16,7 +16,6 @@ trait Command {
 class ExitCommand(webController: Controller, messages: Messages) extends Command {
   def execute(): Boolean = {
     webController.passContent(new MessageTyp(messages.getByby()))
-    System.exit(1)
     true
   }
 }

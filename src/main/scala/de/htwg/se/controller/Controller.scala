@@ -40,7 +40,7 @@ class Controller(using model0: ScraperModelInterface, messages: Messages, conten
       case "redo" :: Nil => commando = new RedoCommand(this, messages, contentHistory)
       case "load" :: filename :: Nil => commando = new LoadCommand(this, filename)
       case "scrape" :: url :: Nil => commando = new ScrapeCommand(this, url)
-      case "exit" :: Nil => commando = new ExitCommand(this, messages)
+      case "exit" :: Nil => commando = new ExitCommand(this, messages); return None
       case _ => println(s"Unbekannter Befehl: '$input'")
     }
     commando.execute()

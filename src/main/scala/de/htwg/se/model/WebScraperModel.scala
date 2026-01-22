@@ -13,7 +13,6 @@ case class WebScraperModel(val currentContent: List[String]) extends ScraperMode
         case _ =>
     }
     notifyObservers(source.getContent(), ContentStatus.success, source.getSourceType())
-    println("\n" + source.getContent().mkString + "\n")
     WebScraperModelCreate(source.getContent())
   }
 
