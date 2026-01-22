@@ -27,7 +27,8 @@ Dieses Projekt ist ein Web Scraper, der Daten von Webseiten extrahiert und in ei
 **Usage: (TUI)**
    ```scala
    sbt "run width length"
-
+   ´´´
 **Usage: (GUI)**
    ```scala
    sbt "run width length g"
+   ´´´
