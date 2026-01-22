@@ -1,78 +1,56 @@
-package de.htwg.se
+package de.htwg.se.controller
 
-import scala.io.StdIn.readLine
-import java.nio.file.{Files, Paths, StandardOpenOption}
+import de.htwg.se.model._
+import de.htwg.se.util.FileIO
+import de.htwg.se.util.viewUtils.Messages
+import de.htwg.se.util.modelUtils.contentTyp._
+import de.htwg.se.util.controllerUtils.memento._
+import de.htwg.se.util.controllerUtils.commands._
+
 import scala.util.{Using, Try}
+import java.nio.file.{Files, Paths, StandardOpenOption}
 
-//State Pattern
-case class State(booleanValue: Boolean) {
-  def setTrue: State = this.copy(booleanValue = true)
-  def setFalse: State = this.copy(booleanValue = false)
-  def getValue: Boolean = booleanValue
-}
-
-class Controller(model: WebScraperModel, view: Tui) {
+class Controller(using model0: ScraperModelInterface, messages: Messages, contentHistory: MementoHistory, format: FileIO)
+  extends ControllerInterface {
   
-  val prompt = ">"
-  def start(): State = {
-    model.processContent(new MessageTyp(model.getWelcomeMessage))
-    mainLoop(new State(true))
+  var commando: Command = _
+  var model: ScraperModelInterface = model0
+  
+  def saveStateBeforeCommand(): Unit = contentHistory.saveState(Memento(model.currentContent, commando))
+
+  def passContent(contentToPass: ContentTyp): ScraperModelInterface = {
+      val newModel = model.processContent(contentToPass)
+      this.model = newModel
+      newModel
   }
 
-  def mainLoop(state: State): State = {
-    if(state.getValue) {
-      print(prompt)
-      val input = readLine().trim
-      handleUserInput(input) match {
-        case true  => mainLoop(state)
-        case false => 
-      }
-    }
-    new State(true) // Gibt State True zurück um auszusagen das die Methode schon Fertig gelaufen ist.
-  }
-
-  def handleUserInput(input: String): Boolean = {
-    val parts = input.split("\\s+").toList
-      
+  def Inputhandler(input: String): Option[String] = {
+    val parts: List[String] = input.split("\\s+").toList
     parts match {
-      case "help" :: Nil => model.processContent(new MessageTyp(model.getHelpMessage))
-        true
-      
-      case "load" :: filename :: Nil => val source = new FileContentTyp(filename)
-        model.processContent(source)
-        true
-      
-      case "scrape" :: url :: Nil => model.processContent(new WebsiteContentTyp(url))
-        true
-      
-      case "input" :: text => model.processContent(new UserInputTyp(text.mkString(" ")))
-        true
-      
-      case "save" :: filename :: Nil => saveCurrentContent(filename)
-        true
-      
-      case "clear" :: Nil => model.processContent(new UserInputTyp(""))
-        true
-      
-      case "exit" :: Nil => model.processContent(new MessageTyp("auf wiedersehen!"))
-        false
-
-      case _ => model.processContent(new MessageTyp(model.getHelpMessage))
-        println(s"Unbekannter Befehl: '$input'")
-        true
+      case "save" :: Nil | "undo" :: Nil | "redo" :: Nil | "help" :: Nil | "exit" :: Nil =>
+      case _ => saveStateBeforeCommand()
     }
+
+    parts match {
+      case "help" :: Nil => commando = new HelpCommand(this, messages)
+      case "input" :: text => commando = new ShowInputCommand(this, text)
+      case "save" :: filename :: sitename :: Nil => commando = new SaveCommand(this, filename, sitename)
+      case "clear" :: Nil => commando = new ClearCommand(this)
+      case "undo" :: Nil => commando = new UndoCommand(this, messages, contentHistory)
+      case "redo" :: Nil => commando = new RedoCommand(this, messages, contentHistory)
+      case "load" :: filename :: Nil => commando = new LoadCommand(this, filename)
+      case "scrape" :: url :: Nil => commando = new ScrapeCommand(this, url)
+      case "exit" :: Nil => commando = new ExitCommand(this, messages)
+      case _ => println(s"Unbekannter Befehl: '$input'")
+    }
+    commando.execute()
+    Some(input)
   }
 
-  private def saveCurrentContent(filename: String): Try[Unit] = {
-    val content = model.getContent.mkString("\n")
-    Try {
-      Using(Files.newBufferedWriter(Paths.get(filename), StandardOpenOption.CREATE, 
-        StandardOpenOption.TRUNCATE_EXISTING)) { writer => writer.write(content + "\n")
-      }
-      println(s"Content gespeichert in: $filename")
-    }.recover {
-      case e: Exception =>
-        println(s"Fehler beim Speichern: ${e.getMessage}")
+  def saveCurrentContent(filename: String, sitename: String): Try[Unit] = {
+    val content = model.currentContent.mkString("\n")
+    Try{
+      format.save(filename, sitename, content)
     }
   }
 }

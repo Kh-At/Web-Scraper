@@ -1,0 +1,4 @@
+FROM hseeberger/scala-sbt: graalvm-ce-21.3.0-java17_1.6.2_3.1.1
+WORKDIR /Webscraper
+ADD . /Webscraper
+CMD ["sbt", "run 60 30"]
