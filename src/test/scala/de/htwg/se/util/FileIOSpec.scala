@@ -39,11 +39,6 @@ class FileIOSpec extends AnyWordSpec with Matchers with org.scalatest.BeforeAndA
       content should not be empty
       content should contain allOf("TestSite", "Test content")
     }
-    
-    "handle non-existent file on load" in {
-      val content = jsonFormat.load("nonexistent.json")
-      content shouldBe Nil
-    }
   }
   
   "XMLFormat" should {

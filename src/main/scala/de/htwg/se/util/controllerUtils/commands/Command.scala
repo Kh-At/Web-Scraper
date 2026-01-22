@@ -75,13 +75,12 @@ class UndoCommand(webController: Controller, messages: Messages, contentHistory:
     }
   }
 }
-
 class RedoCommand(webController: Controller, messages: Messages, contentHistory: MementoHistory) extends Command {
   def execute(): Boolean = {
     contentHistory.redoHistory() match {
       case Some(memento) =>
-        memento.command.execute()
-        true
+        if (memento.command != null) memento.command.execute()
+        else true
       case None => 
         webController.passContent(new MessageTyp(messages.getNothingToRedo()))
         false
