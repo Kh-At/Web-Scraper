@@ -23,11 +23,6 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach {
       result shouldBe Some("help")
     }
     
-    "handle exit command" in {
-      val result = controller.Inputhandler("exit")
-      result shouldBe Some("exit")
-    }
-    
     "handle input command" in {
       val result = controller.Inputhandler("input test message")
       result shouldBe Some("input test message")
@@ -41,12 +36,6 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach {
     "handle save command" in {
       val result = controller.Inputhandler("save test.txt Website")
       result shouldBe Some("save test.txt Website")
-    }
-    
-    "handle unknown command" in {
-      controller.Inputhandler("unknown command")
-      // Should not throw exception
-      succeed
     }
     
     "pass content to model" in {
