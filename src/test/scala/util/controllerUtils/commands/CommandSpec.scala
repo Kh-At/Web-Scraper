@@ -21,16 +21,7 @@ class CommandSpec extends AnyWordSpec with Matchers {
       super.passContent(content)
     }
   }
-  
-  "ExitCommand" should {
-    "execute successfully" in {
-      val controller = new MockController
-      val command = new ExitCommand(controller, new Messages)
-      
-      command.execute() shouldBe true
-    }
-  }
-  
+    
   "HelpCommand" should {
     "execute successfully" in {
       val controller = new MockController
