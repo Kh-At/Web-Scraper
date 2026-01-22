@@ -23,9 +23,11 @@ Dieses Projekt ist ein Web Scraper, der Daten von Webseiten extrahiert und in ei
 - **Java 8+** muss auf deinem Rechner installiert sein (Scala benötigt Java).
 - **SBT** (Scala Build Tool), um das Projekt zu bauen und auszuführen.
 
-### Schritt-für-Schritt Anleitung:
 
-1. **Repository klonen:**
-   Klone das Repository auf deinen Computer:
-   ```bash
-   git clone https://github.com/Kh-At/Web-Scraper
+**Usage: (TUI)**
+   ```scala
+   sbt "run width length"
+
+**Usage: (GUI)**
+   ```scala
+   sbt "run width length g"
