@@ -6,13 +6,13 @@
 Dieses Projekt ist ein Web Scraper, der Daten von Webseiten extrahiert und in einem strukturierten Format speichert. Es verwendet **Scala**, **SBT** (Scala Build Tool) und **Jsoup** für das Scraping. Das Projekt bietet zwei Startoptionen: eine für das Kommandozeilen-Interface (CLI) und eine für eine grafische Benutzeroberfläche (GUI).
 
 ## Features
-- **Automatisiertes Web Scraping:** Extrahiert Daten von beliebigen Webseiten.
-- **Datenfilterung:** Möglichkeit, nur bestimmte Daten (z.B. Preise, Artikelüberschriften) zu extrahieren.
+- **Web Scraping:** Extrahiert Daten von beliebigen Webseiten.
+- **Datenfilterung:** Möglichkeit, nur text zu extrahieren.
 - **Speicherung der Daten:** Gesammelte Daten werden in **XML** oder **JSON** gespeichert.
 - **Zwei Startoptionen:** Kommandozeilen-Interface und grafische Benutzeroberfläche (GUI).
 
 ## Technologien
-- **Scala** 2.13.x
+- **Scala** 3.13.x
 - **SBT** (Scala Build Tool) für Build-Management und Abhängigkeitsverwaltung
 - **Jsoup** für das Parsen von HTML und Extrahieren von Daten
 - **GUI** (optional, je nach Bedarf)
